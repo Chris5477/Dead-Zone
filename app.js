@@ -1,22 +1,22 @@
 class Player {
-    constructor(name, age, weapon, strenght, health, level){
+    constructor(name, age, weapon, strenght, health, level, xp){
         this.name = name;
         this.age = age;
         this.weapon = weapon
         this.strenght = strenght,
         this.health = health;
         this.level = level
+        this.xp = xp;
     }
 
-    lancerDe = function(){
-        console.log(1 + Math.trunc(Math.random() *6))
+    lancerDe = function(nom, sante){
+        const totalDe = (1 + Math.trunc(Math.random() *6))
+        console.log(`vous faites ${totalDe} .`)
+        return totalDe
     }
-    
-    
 }
 
-const myCaractere = new Player(null, null, "poings", 100, 100, 1)
-
+const myCaractere = new Player(null, null, "poings", 100, 100, 1, 0)
 
 class Weapon {
     constructor(name, type , addStatStrenght, addStatHealth){
@@ -67,19 +67,22 @@ constructor(name, strenght, health, particularity, level){
     this.level = level;
 }
 
-lancerDe = function(){
-    return 1 + Math.trunc(Math.random() *6)
+lancerDe = function(joueur){
+    const totalDe = (1 + Math.trunc(Math.random() *6))
+    console.log(`Votre adversaire fait ${totalDe}`)
+    return totalDe
 }
 
 
+
 }
 
-const zombie = new Ennemy("Zombie", 20, 80 , null, 1 )
-const grosZombie = new Ennemy("Gros zombie", 40, 150 , null, 1 )
-const zombieMilitaire = new Ennemy("Zombie Militaire", 60, 200 , null, 1 )
-const zombie2 = new Ennemy("Zombie", 20, 80 , "Couteau planté", 1 )
-const grosZombie2 = new Ennemy("Gros Zombie", 40, 150 , "Hache planté dans le dos", 1 )
-const zombieMilitaire2 = new Ennemy("Zombie militaire", 60, 180 , "magnum dans son hoster", 1 )
+const zombie = new Ennemy("Zombie", 50, 80 , null, 1 )
+const grosZombie = new Ennemy("Gros zombie", 70, 150 , null, 1 )
+const zombieMilitaire = new Ennemy("Zombie Militaire", 80, 200 , null, 1 )
+const zombie2 = new Ennemy("Zombie", 45, 80 , "Couteau planté", 1 )
+const grosZombie2 = new Ennemy("Gros Zombie", 75, 150 , "Hache planté dans le dos", 1 )
+const zombieMilitaire2 = new Ennemy("Zombie militaire", 100, 180 , "magnum dans son hoster", 1 )
 
 class Boss{
 constructor(name, strenght, health , pattern){
@@ -100,7 +103,29 @@ const boss2 = new Boss("Zombie Enorme", 150, 500, "attaque tout les deux tours")
 const boss3 = new Boss("Zombie transformé", 80, 450, "si le dés fait moins de 3 , relance une deuxième attaque" )
 const boss4 = new Boss("Zombie 0",120, 600, "Si le dé du joueur fait 1 ,2 ou 4 , evite l'attaque")
 
-
+const fight = (player , ennemy) => {
+    const healtEnnemy = ennemy.health;
+    while(player.health !== 0 || ennemy.health !== 0){
+  const resDe = player.lancerDe(zombie.name, zombie.health)
+  let dammage = player.strenght * (resDe/10)
+        console.log(`Vous faites ${dammage} de dégat à votre adversaire`)
+        ennemy.health = ennemy.health - dammage
+        console.log(`il reste ${ennemy.health} de santé a ${ennemy.name}`)
+  if(ennemy.health <= 0){
+      console.log("Vous avez vaincu " + ennemy.name + "vous gagnez " + healtEnnemy * player.health * ("0.0"+player.level) + "point d'XP")
+      break;
+  }
+  const resDeE = ennemy.lancerDe(player.health)
+  let dammageE = ennemy.strenght * (resDeE/10)
+        console.log(`L'ennemi vous inflige ${dammageE} de dégat`)
+        player.health = player.health - dammageE
+        console.log(`il vous reste ${player.health} de santé`)
+  if(player.health <= 0){
+      console.log('dead')
+      break;
+  }
+}
+}
 
 
 
@@ -114,9 +139,11 @@ async function main(){
   joueur.health = 100
   joueur.strenght = 100
   joueur.level = 1
+  joueur.xp = 0
   
 
   console.log(`${joueur.name} , Vous vous reveillez après une longue nuit de sommeil , vous avez une sensation bizarre , comme si quelque chose de grave vennez d'arriver ... vous décidez de vous faire un café mais pas de courant , cela renforce votre présentiment . Il est 9h , vous devez vous préparer pour aller au boulot , mais l'ambiance est inhabituelle , pas un bruit , à part des bruits sourd au loin . Vous décider de poursuivre comme si ne rien était et vous tentez d'appeler un taxi pour vous rendre au travail mais le réseau est indisponible ... Vous commencez à comprendre qu'il se passe quelque chose de pas net et vous décider d'aller voir vos voisins pour voir si eux, ont du courant ou du réseau ...  `)
+  
   console.log("Vous ouvrez votre porte d'entrée et votre mauvais présentiment s'amplifie , aucun bruit extérieur ... De plus vous voyez des voitures accidentées , des débris de vitre partout ... vous vous sentez comme seul au monde! Vous vous rendez chez vos voisins , vous sonnez et ... rien ne se ... Vous entendez un bruit , sans doute le vent qui tape sur les vitres . C'est inquiet que vous faites demi-tour...")
   
   const decision1 = await aps(`${joueur.name} , Que voulez-vous faire : Continuer votre chemin sur la rue principale qui semble calme ou aller vers le centre ville ?`)
@@ -124,7 +151,7 @@ async function main(){
   if(decision1 === "Continuer"){
       console.log("a definir")
     }else{
-     console.log("Vous avancez la boule au ventre toujours avec vos mauvaises impressions , vous marchez , marchez encore et encore , sans avoir croisé personne et des bruits étranges sont de plus en plus présent , vous commencez à vous poser des questions quand soudain , une explosion retentit accompagnée de tirs d'arme à feu , cela vous effraie et faite immédiatement demi-tour . Vous courrez comme si votre vie en dépendait , jusqu'au moment ou vous entendez comme un gémissement , comme des cris de douleur ...")
+     console.log("Vous avancez la boule au ventre toujours avec vos mauvaises impressions , vous marchez , marchez encore et encore , sans avoir croisé personne et des bruits étranges sont de plus en plus présent , vous commencez à vous poser des questions quand soudain , une explosion retentit accompagnée de tirs d'arme à feu , cela vous effraie et faite immédiatement demi-tour . Vous courrez comme si votre vie en dépendait , jusqu'au moment ou vous entendez comme un gémissement , comme des cris de douleur ...")  
     }
 
 const decision2 = await aps(`${joueur.name} , Que voulez-vous faire ? Aller aider la personne en difficulté ou ignorer les cris et continuer votre fuite`)
@@ -141,6 +168,7 @@ const decision2 = await aps(`${joueur.name} , Que voulez-vous faire ? Aller aide
                console.log("a definir ")
            }else{
                console.log(`Vous tremblez de peur , vous faite demi-tour et maladroitement vous faites tomber un vase qui été poser sur un meuble à côté de vous , vous paniquez ... il n'y a plus un bruit ,vous ne bougez plus quand d'un coup vous entendez les bruits de pas de la personne courrir vers vous , elle se jette sur la porte . Vous voyez une personne avec des fringues ensanglantées , le visage couvert de blessure , du sang sur la bouche en lachant des cris . ${joueur.name}, vous faites face à votre premier zombie. c'est alors que débute votre premier combat`)
+              fight(joueur, zombie)
            }
         }else{
             console.log("a definir")
@@ -150,6 +178,5 @@ const decision2 = await aps(`${joueur.name} , Que voulez-vous faire ? Aller aide
         console.log("=================================GAME OVER =====================================================")
     }
 }
+
     main()
-    
-    
