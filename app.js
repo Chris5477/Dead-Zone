@@ -9,7 +9,7 @@ class Player {
     this.xp = xp;
   }
 
-  lancerDe = function (nom, sante) {
+  lancerDe = function () {
     const totalDe = 1 + Math.trunc(Math.random() * 6);
     console.log(`vous faites ${totalDe} .`);
     return totalDe;
@@ -31,7 +31,7 @@ const poings = new Weapon("Poings", null, 0, 0);
 const ciseaux = new Weapon("Ciseaux", "offensif", 5, 0);
 const couteau = new Weapon("Couteau", "offesive", 10, 0);
 const tuyau = new Weapon("Tuyau en fer", "mixte", 30, 10);
-const masse = new Weapon("Masse", "offensive", 50, -10);
+const hache = new Weapon("Hâche", "offensive", 50, -10);
 const arc = new Weapon("Arc", "distance", 20, 50);
 const batteBaseball = new Weapon("Batte de Baseball", "offensif", 40, 0);
 const machette = new Weapon("Machette", "offensif", 60, 0);
@@ -66,7 +66,7 @@ class Ennemy {
     this.level = level;
   }
 
-  lancerDe = function (joueur) {
+  lancerDe = function () {
     const totalDe = 1 + Math.trunc(Math.random() * 6);
     console.log(`Votre adversaire fait ${totalDe}`);
     return totalDe;
@@ -107,6 +107,13 @@ const fight = async(player, ennemy) => {
     console.log(styleConsole.warning(`il reste ${ennemy.health} de santé a ${ennemy.name}`));
     if (ennemy.health <= 0) {
       console.log(styleConsole.green("Vous avez vaincu " + ennemy.name + " . Vous gagnez " + healtEnnemy * player.health * ("0.0" + player.level) + " point d'XP"));
+      player.xp += healtEnnemy * player.health * ("0.0" + player.level)
+      if(player.xp >= 100){
+        player.level = 2
+        player.strenght += 15
+        player.health += 20
+        console.log(styleConsole.green(`Vous êtes niveau 2 , votre force passe à ${player.strenght} et votre santé passe à ${player.health}`))
+      }
       break;
     }
     await aps(styleConsole.fight("Appuyer Pour lancer l'attaque de votre adversaire"))
@@ -122,6 +129,23 @@ const fight = async(player, ennemy) => {
   }
 };
 
+const sleep = async player => {
+  console.log(styleConsole.warning("Voici un combat pour déterminer combien de pv vous aller récuperer , si vous faites plus que l'adversaire , vous gagnez un point , si vous battez 5 fois l'adversaire vous serez totalement régenérez . Chaque point vaut 10 points de vie. la partie s'arrête si vous faites moins de votre adversaire"))
+  let point = 0
+ 
+    await aps(styleConsole.fight("Jouez votre tour"))
+    const resDe = player.lancerDe();
+    await aps(styleConsole.fight("Jouez le tour de l'adversaire"))
+    const resDeIa = player.lancerDe();
+    if( resDe > resDeIa){
+      point++
+    }else{
+      const totalHealth = point * 10;
+      player.health = player.health + totalHealth
+      console.log(styleConsole.green(`Vous avez récuperé ${totalHealth}, votre vie passe à ${player.health}`))
+    }
+  
+}
 
 const chalk = require('chalk')
 const aps = require("async-prompt");
@@ -134,7 +158,6 @@ const styleConsole = {
   fight : chalk.blueBright.bold.underline
 }
 
-console.log(boss1)
 
 async function main() {
   const joueur = new Player();
@@ -148,7 +171,7 @@ async function main() {
   joueur.xp = 0;
 
   const script = {
-    intro: `${joueur.name}, vous vous reveillez après une longue nuit de sommeil , vous avez une sensation bizarre , comme si quelque chose de grave vennez d'arriver ... vous décidez de vous faire un café mais pas de courant , cela renforce votre présentiment . Il est 9h , vous devez vous préparer pour aller au boulot , mais l'ambiance est inhabituelle , pas un bruit , à part des bruits sourd au loin . Vous décider de poursuivre comme si ne rien était et vous tentez d'appeler un taxi pour vous rendre au travail mais le réseau est indisponible ... Vous commencez à comprendre qu'il se passe quelque chose de pas net et vous décider d'aller voir vos voisins pour voir si eux, ont du courant ou du réseau ...
+    intro: `${joueur.name}, vous vous reveillez après une longue nuit de sommeil , vous avez une sensation bizarre , comme si quelque chose de grave venez d'arriver ... vous décidez de vous faire un café mais pas de courant , cela renforce votre présentiment . Il est 9h , vous devez vous préparer pour aller au boulot , mais l'ambiance est inhabituelle , pas un bruit , à part des bruits sourd au loin . Vous décider de poursuivre comme si ne rien était et vous tentez d'appeler un taxi pour vous rendre au travail mais le réseau est indisponible ... Vous commencez à comprendre qu'il se passe quelque chose de pas net et vous décider d'aller voir vos voisins pour voir si eux, ont du courant ou du réseau ...
         Vous ouvrez votre porte d'entrée et votre mauvais présentiment s'amplifie , aucun bruit extérieur ... De plus vous voyez des voitures accidentées , des débris de vitre partout ... vous vous sentez comme seul au monde! Vous vous rendez chez vos voisins , vous sonnez et ... rien ne se ... Vous entendez un bruit , sans doute le vent qui tape sur les vitres . C'est inquiet que vous faites demi-tour... `,
     script1A: "à définir",
     script1B:
@@ -170,6 +193,8 @@ async function main() {
     script8A: "A definir",
     script8B:
       "Vous avancez discretement vers l'origine du bruit , et vous voyez un zombie en train de faire son festin , a genou la bouche dans les entraille d'un cadavre , vous êtes terrifié, vous ne contrôlez plus votre respiration, mais ce qui vous choque le plus c'est que ce monstre a une hache planté au noveau du cou , le zombie vous à repèrer et s'approche de vous",
+    script8A2: "Vous avez aperçu la hâche planté dans le dos du zombie",
+    script9A : `Ce combat à été épuisant , vous êtes ${joueur.health < 40 ? "très affaibli" : "légérement bléssé"} , vous décidez d'aller vous barricader et de dormir un peu afin de récuperer un peu d'énérgie`
   };
 
   console.log(script.intro);
@@ -214,7 +239,17 @@ async function main() {
   console.log(script.script7A);
   const decision6A = await aps(`${joueur.name}, Voulez-vous fouiller la cuisine (1) ou aller voir ce qu'il se passe (2) ?`);
   decision6A === "1" ? console.log(script.script8A) : console.log(script.script8B);
-  fight(joueur, zombieFaible);
+  await fight(joueur, zombieFaible);
+  console.log(script.script8A2)
+  const decision8A2 = await aps(`${joueur.name} , Voulez-vous prendre la hâche ?`)
+  if(decision8A2 === "oui"){
+    joueur.weapon = hache;
+    joueur.strenght = joueur.strenght + hache.addStatStrenght - ciseaux.addStatStrenght
+    joueur.health = joueur.health + hache.addStatHealth
+    console.log(styleConsole.green(`Vos stats sont modifiées : votre force est désormais de ${joueur.strenght} et votre santé est désormais de ${joueur.health}`))
+  }
+  console.log(script.script9A)
+  await sleep(joueur)
 }
 
 main()
