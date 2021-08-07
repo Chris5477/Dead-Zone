@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "async-prompt": "^1.0.1",
+    "chalk": "^3.0.0",
     "prompt-sync": "^4.2.0"
   }
 }

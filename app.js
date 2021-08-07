@@ -77,7 +77,7 @@ const zombie = new Ennemy("Zombie", 50, 80, null, 1);
 const grosZombie = new Ennemy("Gros zombie", 70, 150, null, 1);
 const zombieMilitaire = new Ennemy("Zombie Militaire", 80, 200, null, 1);
 const zombie2 = new Ennemy("Zombie", 45, 80, "Couteau planté", 1);
-const zombieFaile = new Ennemy("Zombie affaibli", 75, 60, "Hache planté dans le cou", 1);
+const zombieFaible = new Ennemy("Zombie affaibli", 75, 60, "Hache planté dans le cou", 1);
 const zombieMilitaire2 = new Ennemy("Zombie militaire", 100, 180, "magnum dans son hoster", 1);
 
 class Boss {
@@ -98,23 +98,25 @@ const boss2 = new Boss("Zombie Enorme", 150, 500, "attaque tout les deux tours")
 const boss3 = new Boss("Zombie transformé", 80, 450, "si le dés fait moins de 3 , relance une deuxième attaque");
 const boss4 = new Boss("Zombie 0", 120, 600, "Si le dé du joueur fait 1 ,2 ou 4 , evite l'attaque");
 
-const fight = (player, ennemy) => {
+const fight = async(player, ennemy) => {
   const healtEnnemy = ennemy.health;
   while (player.health !== 0 || ennemy.health !== 0) {
+    await aps(styleConsole.fight("Appuyer pour lancer votre attaque ?"))
     const resDe = player.lancerDe(zombie.name, zombie.health);
     let dammage = player.strenght * (resDe / 10);
-    console.log(`Vous faites ${dammage} de dégat à votre adversaire`);
+    console.log(styleConsole.dammageEnnemy(`Vous faites ${dammage} de dégat à votre adversaire`));
     ennemy.health = ennemy.health - dammage;
-    console.log(`il reste ${ennemy.health} de santé a ${ennemy.name}`);
+    console.log(styleConsole.warning(`il reste ${ennemy.health} de santé a ${ennemy.name}`));
     if (ennemy.health <= 0) {
-      console.log("Vous avez vaincu " + ennemy.name + " . Vous gagnez " + healtEnnemy * player.health * ("0.0" + player.level) + " point d'XP");
+      console.log(styleConsole.green("Vous avez vaincu " + ennemy.name + " . Vous gagnez " + healtEnnemy * player.health * ("0.0" + player.level) + " point d'XP"));
       break;
     }
+    await aps(styleConsole.fight("Appuyer Pour lancer l'attaque de votre adversaire"))
     const resDeE = ennemy.lancerDe(player.health);
     let dammageE = ennemy.strenght * (resDeE / 10);
-    console.log(`L'ennemi vous inflige ${dammageE} de dégat`);
+    console.log(styleConsole.dammagePlayer(`L'ennemi vous inflige ${dammageE} de dégat`));
     player.health = player.health - dammageE;
-    console.log(`il vous reste ${player.health} de santé`);
+    console.log(styleConsole.warning(`il vous reste ${player.health} de santé`));
     if (player.health <= 0) {
       console.log("dead");
       break;
@@ -122,7 +124,17 @@ const fight = (player, ennemy) => {
   }
 };
 
+const chalk = require('chalk')
 const aps = require("async-prompt");
+
+const styleConsole = {
+  warning : chalk.yellowBright.bgRed,
+  dammageEnnemy : chalk.green.bgBlack,
+  dammagePlayer : chalk.red.bgBlack,
+  green : chalk.greenBright.bgBlack.italic,
+  fight : chalk.blueBright.bold.underline
+}
+
 
 async function main() {
   const joueur = new Player();
@@ -154,10 +166,10 @@ async function main() {
     script6A:"a definir",
     script6B:  "Vous pouuser la commode de la chambre devant la porte en prenant soin de faire le moins de bruit possible , et vous décidez de vous planquez sous le lit... Quelques minutes plus tard, des coups de feu retentissent ,ce qui attire les zombies , c'est une opportunité pour vous échapper! En sortant du dessous de lit , vous voyez un sac à dos vide...",
     script7A:
-      "Vous avez pris le sac à dos, vous descendez au rdc , vous passez par la cuisine ... vous avez faim mais vous entendez des bruits comme si quelqu'un était à côté",
-    script8A:
+    "Vous avez pris le sac à dos, vous descendez au rdc , vous passez par la cuisine ... vous avez faim mais vous entendez des bruits comme si quelqu'un était à côté",
+    script8A: "A definir",
+    script8B:
       "Vous avancez discretement vers l'origine du bruit , et vous voyez un zombie en train de faire son festin , a genou la bouche dans les entraille d'un cadavre , vous êtes terrifié, vous ne contrôlez plus votre respiration, mais ce qui vous choque le plus c'est que ce monstre a une hache planté au noveau du cou , le zombie vous à repèrer et s'approche de vous",
-    script8B: "A definir",
   };
 
   console.log(script.intro);
@@ -179,12 +191,13 @@ async function main() {
     joueur.weapon = ciseaux;
     joueur.strenght = joueur.strenght + ciseaux.addStatStrenght;
     joueur.health = joueur.health + ciseaux.addStatHealth;
+    console.log(styleConsole.green(`Vos stats sont modifiées : votre force fait désormais ${joueur.strenght} et votre santé fait désormais ${joueur.health}`))
   }
   console.log(script.script3A);
 
   const decision4A = await aps(`${joueur.name} , Que voulez-vous faire ? ouvrir la porte(1) ou faire demi-tour(2)`);
   decision4A === 1 ? console.log(script.script4A) : console.log(script.script4B);
-  fight(joueur, zombie);
+  await fight(joueur, zombie);
 
   console.log(script.script5A);
 
@@ -196,12 +209,12 @@ async function main() {
   const decision6 = await aps(`${joueur.name}, Voulez-vous prendre le sac à dos ?`);
   if (decision6 === "oui") {
     joueur.stack = joueur.stack + SacADos.stack;
+    console.log(styleConsole.green(`Vos stats sont modifiés : vous disposez de ${joueur.stack} emplacement(s)`))
   }
   console.log(script.script7A);
   const decision6A = await aps(`${joueur.name}, Voulez-vous fouiller la cuisine (1) ou aller voir ce qu'il se passe (2) ?`);
   decision6A === "1" ? console.log(script.script8A) : console.log(script.script8B);
-  console.log();
-  fight(joueur, zombieFaile);
+  fight(joueur, zombieFaible);
 }
 
 main()
