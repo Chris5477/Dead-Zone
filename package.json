@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^2.0.9"
+    "nodemon": "^2.0.12"
   },
   "dependencies": {
     "async-prompt": "^1.0.1",

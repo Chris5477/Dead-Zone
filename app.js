@@ -80,12 +80,10 @@ const zombie2 = new Ennemy("Zombie", 45, 80, "Couteau planté", 1);
 const zombieFaible = new Ennemy("Zombie affaibli", 75, 60, "Hache planté dans le cou", 1);
 const zombieMilitaire2 = new Ennemy("Zombie militaire", 100, 180, "magnum dans son hoster", 1);
 
-class Boss {
+class Boss extends Ennemy{
   constructor(name, strenght, health, pattern) {
-    this.name = name;
-    this.strenght = strenght;
-    this.health = health;
-    this.pattern = pattern;
+    super(name, strenght, health)
+    this.pattern = pattern
   }
 
   lancerDe = function () {
@@ -124,6 +122,7 @@ const fight = async(player, ennemy) => {
   }
 };
 
+
 const chalk = require('chalk')
 const aps = require("async-prompt");
 
@@ -135,6 +134,7 @@ const styleConsole = {
   fight : chalk.blueBright.bold.underline
 }
 
+console.log(boss1)
 
 async function main() {
   const joueur = new Player();
