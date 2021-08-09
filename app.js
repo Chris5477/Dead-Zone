@@ -16,9 +16,6 @@ class Player {
     return totalDe;
   };
 }
-
-const myCaractere = new Player(null, null, "poings", 100, 100, 1, 0);
-
 class Weapon {
   constructor(name, type, addStatStrenght, addStatHealth) {
     this.name = name;
@@ -74,11 +71,11 @@ class Ennemy {
   };
 }
 
-const zombie = new Ennemy("Zombie", 50, 80, null, 1);
-const grosZombie = new Ennemy("Gros zombie", 70, 150, null, 1);
+const zombie = new Ennemy("Zombie", 60, 80, null, 1);
+const grosZombie = new Ennemy("Gros zombie", 70, 100, null, 1);
 const zombieMilitaire = new Ennemy("Zombie Militaire", 80, 200, null, 1);
 const zombie2 = new Ennemy("Zombie", 45, 80, "Couteau planté", 1);
-const zombieFaible = new Ennemy("Zombie affaibli", 75, 60, "Hache planté dans le cou", 1);
+const zombieFaible = new Ennemy("Zombie affaibli", 50, 60, "Hache planté dans le cou", 1);
 const zombieMilitaire2 = new Ennemy("Zombie militaire", 100, 180, "magnum dans son hoster", 1);
 
 class Boss extends Ennemy {
@@ -154,7 +151,7 @@ const sleep = async (player) => {
     resDeIa = player.lancerDe();
   }
   const totalHealth = point * 10;
-  player.health = player.health + totalHealth;
+  player.health += totalHealth;
   console.log(styleConsole.green(`Vous avez récuperé ${totalHealth}, votre vie passe à ${player.health}`));
 };
 
@@ -208,8 +205,16 @@ async function main() {
     intro: `${joueur.name}, vous vous reveillez après une longue nuit de sommeil , vous avez une sensation bizarre, comme si quelque chose de grave venez d'arriver...Vous décidez de vous faire un café mais pas de courant , cela renforce votre présentiment. Il est 9h , vous devez vous préparer pour aller au boulot , mais l'ambiance est inhabituelle , pas un bruit , à part des bruits sourd au loin. Vous décider de poursuivre comme si ne rien était et vous tentez d'appeler un taxi pour vous rendre au travail mais le réseau est indisponible. Vous commencez à comprendre qu'il se passe quelque chose de pas net, 
     et vous décider d'aller voir vos voisins pour voir si eux, ont du courant ou du réseau...`,
     intro2: `Vous ouvrez votre porte d'entrée et votre mauvais présentiment s'amplifie , aucun bruit extérieur... De plus vous voyez des voitures accidentées , des débris de vitre partout ... vous vous sentez comme seul au monde! Vous vous rendez chez vos voisins , vous sonnez et ... rien ne se... Vous entendez un bruit, sans doute le vent qui tape sur les vitres. C'est inquiet que vous faites demi-tour...`,
-    script1A: "à définir",
-    script1B1: `\n Vous avancez la boule au ventre toujours avec vos mauvaises impressions , vous marchez , marchez encore et encore , sans avoir croisé personne et des bruits étranges sont de plus en plus présent. Vous commencez à vous poser des questions quand soudain ...`,
+    script1A: `Vous continuez votre chemin , vous observez les alentours et tout ce que vous voyez , c'est des voitures abandonnées ,certaines ont les portières ouvertes, d'autres sont défoncées mais pas un bruit ressort de cette rue.`,
+    script1A2 : `Après avoir marché sur plusieurs centaines de mètres ,vous pouvez voir un bouchon de voitures abandonées, portes ouvertes , vitres explosées. Ce bouchon se situe à l'entrée d'un pont qui permettait de quitter la ville , mais vous aperçevez également une sorte de grillage. A niveau de l'entrée du pont. Vous vous posez la question sur ce délire , cela vous rappelle les nombreux films apocalyptique que vous avez pu voir , comme si c'était  une zone de quarantaine.`,
+    script1A3 :`Curieux vous décidez d'approcher les voitures pour voir si un indice pourrait vous renseigner sur ce qu'il se passe mais vous distinguer un cadavre au sol, vous êtes sous le choc , en regardant le zombie , vous voyez des morsures au niveau de la jambe et du ventre, vous vous sentez mal et vous vomissez. Une fois remis de vos émotions vous entendez quelque chose , vous vous retournez et....`,
+    script1A4 : `Vous voyez le cadavre se relever avec difficulté , vous êtes tétanisé de peur , vous comprenez pas, il se tient debout malgré une intégrité plus que discutable. ${joueur.name}, vous faites face a votre premier zombie et vous n'avez pas le choix de vous défendre`,
+    script1A5 : `Vous venez de tuer votre premier zombie , vous vous sentez mal, vous comprenez rien... `,
+    script1A6 : `Vous fouillez les voitures , vous trouvez rien de vraiment intéressant, à part un sac de voyage , deux conserves et une sucrerie`,
+    script1A7 : `Vous quittez ce lieu sans trainer en continuant votre chemin. Après plusieurs métres vous entendez`,
+    script1A8 : `Une explosion assez lointaine avec des tirs ,vous n'êtes pas rassurez , vous faites demi-tour pour vous éloigner, au bout de quelques minutes vous pouvez entendre quelque chose d'étrange qui semble venir vers vous.`,
+    script1A9 : `En arrivant à une intersection  vous voyez les rues bondées de zombies qui semble avoir été attirés par l'explosion , vous faites demi tour et vous n'avez pas le choix vous devez vous rendre vers le centre ville.`,
+    script1B1: `Vous avancez la boule au ventre toujours avec vos mauvaises impressions , vous marchez , marchez encore et encore , sans avoir croisé personne et des bruits étranges sont de plus en plus présent. Vous commencez à vous poser des questions quand soudain ...`,
     script1B2: `une explosion retentit accompagnée de tirs d'arme à feu , cela vous effraie et faite immédiatement demi-tour .`,
     script1B3: ` Vous courrez comme si votre vie en dépendait, jusqu'au moment ou vous entendez comme un gémissement , comme des cris de douleur ...`,
     script2A: `Le stress monte , votre rythme cardiaque augmente , vous avez l'impression de ne plus rien contrôler , mais vous essayer de garder votre sang-froid et d'aller secourir la personne. Le bruit vient de la maison d'en face de vous... la porte est entre-ouverte , vous rentrez sans réfléchir et vous découvrez les lieux , une odeur nauséabonde et un bordel sans nom .`,
@@ -226,13 +231,12 @@ async function main() {
     script6A: "a definir",
     script6B: `Vous poussez la commode de la chambre devant la porte en prenant soin de faire le moins de bruit possible , et vous décidez de vous planquez sous le lit.`,
     script6B1: `Quelques minutes plus tard, des coups de feu retentissent ,ce qui attire les zombies , c'est une opportunité pour vous échapper! En sortant du dessous de lit , vous voyez un sac à dos vide...`,
-    script7A: `Vous avez pris le sac à dos, vous descendez au rdc , vous passez par la cuisine ... vous avez faim mais vous entendez des bruits comme si quelqu'un était à côté`,
+    script7A: `Vous descendez au rdc , vous passez par la cuisine... vous avez faim mais vous entendez des bruits comme si quelqu'un était à côté`,
     script8A: "A definir",
-    script8B: `Vous avancez discretement vers l'origine du bruit , et vous voyez un zombie en train de faire son festin , a genou la bouche dans les entraille d'un cadavre , vous êtes terrifié, vous ne contrôlez plus votre respiration, mais ce qui vous choque le plus c'est que ce monstre a une hache planté au noveau du cou , le zombie vous à repèrer et s'approche de vous`,
+    script8B: `Vous avancez discretement vers l'origine du bruit , et vous voyez un zombie en train de faire son festin , a genou la bouche dans les entraille d'un cadavre , vous êtes terrifié, vous ne contrôlez plus votre respiration, mais ce qui vous choque le plus c'est que ce monstre a une hache planté au noveau du cou`,
+    script8B2 : `Vous avez été trahi par le bruit de votre respiration et le zombie vous à repèrer, il se relève et commence à s'approche de vous`,
     script8A2: "Vous avez aperçu la hâche planté dans le dos du zombie",
-    script9A: `Ce combat à été épuisant , vous êtes ${
-      joueur.health < 40 ? "très affaibli" : "légérement bléssé"
-    } , vous décidez d'aller vous barricader et de dormir un peu afin de récuperer un peu d'énérgie`,
+    script9A: `Ce combat à été épuisant , vous êtes bléssé, vous décidez d'aller vous barricader et de dormir un peu afin de récuperer un peu d'énérgie`,
   };
 
   console.log(script.intro);
@@ -243,74 +247,134 @@ async function main() {
     `${joueur.name} , Que voulez-vous faire : Continuer votre chemin sur la rue principale qui semble calme (1) ou aller vers le centre ville ? (2)`
   );
 
-  decision1 === "1" ? console.log(script.script1A) : console.log(script.script1B1);
-  await aps("");
-  player.play(sound.ambiance.explose);
-  player.play(sound.ambiance.warzone);
-  console.log(script.script1B2);
-  await aps("");
-  player.play(sound.ambiance.screamMan);
-  console.log(script.script1B3);
-  const decision2B1 = await aps(
-    `${joueur.name} , Que voulez-vous faire ? Aller aider la personne en difficulté (1) ou ignorer les cris et continuer votre fuite (2)`
-  );
-
-  decision2B1 === "1" ? console.log(script.script2A) : console.log(script.script2B);
-  player.play(sound.ambiance.heart);
-  await aps("");
-  player.play(sound.zombie.noiseZombie);
-  console.log(script.script2A2);
-  const decision3A2 = await aps("voulez-vous prendre les ciseaux ?");
-
-  if (decision3A2 === "oui") {
-    joueur.weapon = ciseaux;
-    joueur.strenght = joueur.strenght + ciseaux.addStatStrenght;
-    joueur.health = joueur.health + ciseaux.addStatHealth;
-    console.log(
-      styleConsole.green(`Vos stats sont modifiées : votre force fait désormais ${joueur.strenght} et votre santé fait désormais ${joueur.health}`)
-    );
-  }
-  console.log(script.script3A);
-  const decision4A = await aps(`${joueur.name} , Que voulez-vous faire ? ouvrir la porte(1) ou faire demi-tour(2)`);
-  decision4A === 1 ? console.log(script.script4A) : console.log(script.script4B);
-  player.play(sound.ambiance.glassBroken);
-  await fight(joueur, zombie);
-
-  console.log(script.script5A);
-  player.play(sound.zombie.hordeZombie);
-  const decision5A = await aps(
-    `${joueur.name}, Que voulez-vous faire . Essayer de partir discretement(1), ou barricader l'entrée de la chambre et attendre que ces choses s'en aillent (2)?`
-  );
-  decision5A === "1" ? console.log(script.script6A) : console.log(script.script6B);
-  await aps("");
-  player.play(sound.ambiance.warzone);
-  console.log(script.script6B1);
-  const decision6 = await aps(`${joueur.name}, Voulez-vous prendre le sac à dos ?`);
-  if (decision6 === "oui") {
-    joueur.stack = joueur.stack + SacADos.stack;
+  if(decision1 === "1"){
+    console.log(script.script1A)
+    await aps("")
+    console.log(script.script1A2)
+    await aps("")
+    console.log(script.script1A3)
+    await aps("")
+    player.play(sound.zombie.noiseZombie2)
+    console.log(script.script1A4)
+    await fight(joueur, grosZombie)
+    console.log(script.script1A5)
+    await aps("")
+    console.log(script.script1A6)
+    const prendreSac = await aps("Voulez-vous prendre le sac de voyage ?")
+    if(prendreSac === "oui")
+    joueur.stack = joueur.stack + sacVoyage.stack;
     console.log(styleConsole.green(`Vos stats sont modifiés : vous disposez de ${joueur.stack} emplacement(s)`));
-  }
-  console.log(script.script7A);
-  player.play(sound.zombie.meelZombie);
-  const decision6A = await aps(`${joueur.name}, Voulez-vous fouiller la cuisine (1) ou aller voir ce qu'il se passe (2) ?`);
-  decision6A === "1" ? console.log(script.script8A) : console.log(script.script8B);
-  player.play(sound.zombie.soupirZombie);
-  await fight(joueur, zombieFaible);
-  console.log(script.script8A2);
-  const decision8A2 = await aps(`${joueur.name} , Voulez-vous prendre la hâche ?`);
-  if (decision8A2 === "oui") {
-    joueur.weapon = hache;
-    joueur.strenght = joueur.strenght + hache.addStatStrenght - ciseaux.addStatStrenght;
-    joueur.health = joueur.health + hache.addStatHealth;
-    console.log(
-      styleConsole.green(
-        `Vos stats sont modifiées : votre force est désormais de ${joueur.strenght} et votre santé est désormais de ${joueur.health}`
-      )
-    );
-  }
+    const prendreConserve = await aps("Voulez-vous prendre les conserves (espace disponile 5) ? ")
+    if(prendreConserve === "oui")
+    joueur.stack = conserve + conserve + "" +"" + "";
+    console.log(styleConsole.green(`Vos stats sont modifiés : vous disposez de ${joueur.stack - 2} emplacement(s)`));
+    const prendreSucrerie = await aps("Voulez-vous prendre la sucrerie ?(espace disponile 3)")
+    if(prendreSucrerie === "oui")
+    joueur.stack = conserve + conserve + sucrerie +"" + "";
+    console.log(styleConsole.green(`Vos stats sont modifiés : vous disposez de ${joueur.stack - 3}  emplacement(s)`));
+    await aps("")
+    console.log(script.script1A7)
+    await aps("")
+    player.play(sound.ambiance.explose)
+    player.play(sound.ambiance.warzone)
+    console.log(script.script1A8)
+    await aps("")
+    player.play(sound.zombie.hordeZombie)
+    console.log(script.script1A9)
 
-  console.log(script.script9A);
-  await sleep(joueur);
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }else{ 
+   console.log(script.script1B1);
+    await aps("");
+    player.play(sound.ambiance.explose);
+    player.play(sound.ambiance.warzone);
+    console.log(script.script1B2);
+    await aps("");
+    player.play(sound.ambiance.screamMan);
+    console.log(script.script1B3);
+    const decision2B1 = await aps(
+      `${joueur.name} , Que voulez-vous faire ? Aller aider la personne en difficulté (1) ou ignorer les cris et continuer votre fuite (2)`
+    )
+    decision2B1 === "1" ? console.log(script.script2A) : console.log(script.script2B);
+    player.play(sound.ambiance.heart);
+    await aps("");
+    player.play(sound.zombie.noiseZombie);
+    console.log(script.script2A2);
+    const decision3A2 = await aps("voulez-vous prendre les ciseaux ?");
+  
+    if (decision3A2 === "oui") {
+      joueur.weapon = ciseaux;
+      joueur.strenght = joueur.strenght + ciseaux.addStatStrenght;
+      joueur.health = joueur.health + ciseaux.addStatHealth;
+      if(joueur.health < 0){
+        joueur.health = 1
+      }
+      console.log(
+        styleConsole.green(`Vos stats sont modifiées : votre force fait désormais ${joueur.strenght} et votre santé fait désormais ${joueur.health}`)
+      );
+    }
+    console.log(script.script3A);
+    const decision4A = await aps(`${joueur.name} , Que voulez-vous faire ? ouvrir la porte(1) ou faire demi-tour(2)`);
+    decision4A === 1 ? console.log(script.script4A) : console.log(script.script4B);
+    player.play(sound.ambiance.glassBroken);
+    await fight(joueur, zombie);
+  
+    console.log(script.script5A);
+    player.play(sound.zombie.hordeZombie);
+    const decision5A = await aps(
+      `${joueur.name}, Que voulez-vous faire . Essayer de partir discretement(1), ou barricader l'entrée de la chambre et attendre que ces choses s'en aillent (2)?`
+    );
+    decision5A === "1" ? console.log(script.script6A) : console.log(script.script6B);
+    await aps("");
+    player.play(sound.ambiance.warzone);
+    console.log(script.script6B1);
+    const decision6 = await aps(`${joueur.name}, Voulez-vous prendre le sac à dos ?`);
+    if (decision6 === "oui") {
+      joueur.stack = joueur.stack + SacADos.stack;
+      console.log(styleConsole.green(`Vos stats sont modifiés : vous disposez de ${joueur.stack} emplacement(s)`));
+    }
+    console.log(script.script7A);
+    player.play(sound.zombie.meelZombie);
+    const decision6A = await aps(`${joueur.name}, Voulez-vous fouiller la cuisine (1) ou aller voir ce qu'il se passe (2) ?`);
+    decision6A === "1" ? console.log(script.script8A) : console.log(script.script8B);
+    await aps("")
+    player.play(sound.zombie.soupirZombie);
+    console.log(script.script8B2)
+    await fight(joueur, zombieFaible);
+    console.log(script.script8A2);
+    const decision8A2 = await aps(`${joueur.name} , Voulez-vous prendre la hâche ?`);
+    if (decision8A2 === "oui") {
+      joueur.weapon = hache;
+      joueur.strenght = joueur.strenght + hache.addStatStrenght - ciseaux.addStatStrenght;
+      joueur.health = joueur.health + hache.addStatHealth;
+      console.log(
+        styleConsole.green(
+          `Vos stats sont modifiées : votre force est désormais de ${joueur.strenght} et votre santé est désormais de ${joueur.health}`
+        )
+      );
+    }
+  
+    console.log(script.script9A);
+    await sleep(joueur);
+  }
 }
+
+
 
 main();
